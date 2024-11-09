@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ <h2 align="center">📚 Worksheet App</h2>
 
-## Getting Started
+**📝 Introduction** <br>
+The Worksheet App is an AI-powered application designed to dynamically generate math questions based on user input such as exam type, topic, and desired number of questions. Built with a modern stack, this app provides a responsive and clean user interface, robust database management, and integrates AI capabilities for enhanced functionality.
 
-First, run the development server:
+**🛠️ Tech Stack** <br>
+**Frontend:** React, Next.js, Tailwind CSS <br>
+**Backend:** Node.js, Next.js API Routes <br>
+**Database:** PostgreSQL with Prisma ORM <br>
+**AI Integration:** Google Gemini API (PaLM-2 model) <br>
+**Environment:** TypeScript, Vercel (for deployment) <br>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**🚀 Getting Started** <br>
+Follow these steps to run the project locally: <br>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Prerequisites** <br>
+Ensure you have the following installed on your machine:<br>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Node.js (v18+) <br>
+npm (v7+) <br>
+PostgreSQL <br>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Clone the Repository** <br><br>
+**Install Dependencies** <br><br>
+**Set Up Environment Variables** <br><br>
+**Database Setup** <br>
 
-## Learn More
+1. npx prisma migrate dev <br>
+2. npx prisma db seed <br><br>
 
-To learn more about Next.js, take a look at the following resources:
+**Run the Development Server**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ <h2 align="center">User Interface</h2> <br>
+<div align="center">
+    <img src="public/assets/images/Screenshot.png" alt="Project Screenshot" width="600">
+</div>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<br>
 
-## Deploy on Vercel
+✨ **Features** <br>
+**Dynamic Question Generation:** AI-powered question generation based on user-selected exam type, topic, and number of questions. <br>
+**Responsive UI:** Clean, modern, and mobile-friendly design. <br>
+**Database Management:** Robust handling of data using PostgreSQL and Prisma ORM. <br>
+**AI Integration:** Utilizes the Google Gemini API for intelligent question generation. <br><br>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🤝 **Contributing** <br>
+We welcome contributions! Please feel free to open issues or submit pull requests.
