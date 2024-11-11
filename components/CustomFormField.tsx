@@ -22,6 +22,7 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
+import katex from "katex";
 
 interface Option {
   value: string;
@@ -120,23 +121,31 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       return null;
   }
 };
+const MathText = ({ mathExpression }) => {
+  const html = katex.renderToString(mathExpression, {
+    throwOnError: false,
+  });
+
+  return <span dangerouslySetInnerHTML={{ __html: html }} />;
+};
 
 const CustomFormField = (props: CustomProps) => {
   const { control, fieldType, name, label } = props;
   return (
-    <FormField
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className="flex-1">
-          {fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel>{label}</FormLabel>
-          )}
-          <RenderField field={field} props={props} />
-          <FormMessage className="shad-error" />
-        </FormItem>
-      )}
-    />
+    <>
+      <MathText mathExpression={label || ""} />
+
+      <FormField
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <FormItem className="flex-1">
+            <RenderField field={field} props={props} />
+            <FormMessage className="shad-error" />
+          </FormItem>
+        )}
+      />
+    </>
   );
 };
 

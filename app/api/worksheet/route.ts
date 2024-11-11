@@ -1,17 +1,20 @@
+// route.ts
 import { NextResponse } from "next/server";
-import { generateQuestions } from "../../../lib/geminiClient";
+
+// Uncomment these lines when using OpenAI API
+// import { generateQuestions } from "../../../lib/geminiClient";
 
 export async function POST(request: Request) {
   const { exam, topic, questions } = await request.json();
 
+  // Comment out the OpenAI API call and response handling
+  /*
   if (exam && topic && questions) {
     try {
       const prompt = `
         Generate ${questions} progressively harder math questions on the topic of ${topic} for ${exam} preparation.
         Format each question as "Q: [Question text]".
       `;
-
-      console.log("Sending prompt to PaLM-2 API:", prompt);
       const generatedText = await generateQuestions(prompt);
       const questionList = generatedText
         ?.split("\n")
@@ -26,6 +29,8 @@ export async function POST(request: Request) {
       );
     }
   }
+  */
 
-  return NextResponse.json({ error: "Invalid request data." }, { status: 400 });
+  // Return a dummy success response for now
+  return NextResponse.json({ message: "Worksheet generated" });
 }

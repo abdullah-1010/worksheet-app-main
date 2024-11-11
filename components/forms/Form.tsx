@@ -36,22 +36,25 @@ const MForm = () => {
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
+
+    // Temporarily comment out the original API call and response handling
+    /*
     try {
       console.log("Form submitted:", values);
-
+  
       // Send request to the backend API for question generation
       const response = await fetch("/api/worksheet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to generate questions.");
       }
-
+  
       const data = await response.json();
-
+  
       // Redirect user to the worksheet page with generated questions
       router.push(
         `/worksheet?data=${encodeURIComponent(JSON.stringify(data))}`
@@ -60,7 +63,13 @@ const MForm = () => {
       console.error(error);
       alert("An error occurred while generating the worksheet.");
     }
-    setIsLoading(false);
+    */
+
+    // Simulate a 2-second loading delay and redirect to the worksheet page
+    setTimeout(() => {
+      router.push("/worksheet");
+      setIsLoading(false);
+    }, 2000);
   };
 
   return (
