@@ -22,7 +22,6 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
-import katex from "katex";
 
 interface Option {
   value: string;
@@ -75,8 +74,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           <FormControl>
             <Input
               placeholder={placeholder}
-              type={props.type || "text"}
-              {...(props.valueAsNumber ? { valueAsNumber: true } : {})}
+              type={props.type || "text"} // Use the type prop or default to "text"
               {...field}
               className="shad-input border-0"
             />
@@ -121,31 +119,23 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       return null;
   }
 };
-const MathText = ({ mathExpression }) => {
-  const html = katex.renderToString(mathExpression, {
-    throwOnError: false,
-  });
-
-  return <span dangerouslySetInnerHTML={{ __html: html }} />;
-};
 
 const CustomFormField = (props: CustomProps) => {
   const { control, fieldType, name, label } = props;
   return (
-    <>
-      <MathText mathExpression={label || ""} />
-
-      <FormField
-        control={control}
-        name={name}
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <RenderField field={field} props={props} />
-            <FormMessage className="shad-error" />
-          </FormItem>
-        )}
-      />
-    </>
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="flex-1">
+          {fieldType !== FormFieldType.CHECKBOX && label && (
+            <FormLabel>{label}</FormLabel>
+          )}
+          <RenderField field={field} props={props} />
+          <FormMessage className="shad-error" />
+        </FormItem>
+      )}
+    />
   );
 };
 

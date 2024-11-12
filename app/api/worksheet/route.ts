@@ -1,36 +1,47 @@
-// route.ts
 import { NextResponse } from "next/server";
-
-// Uncomment these lines when using OpenAI API
-// import { generateQuestions } from "../../../lib/geminiClient";
+import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
-  const { exam, topic, questions } = await request.json();
+  try {
+    const { userId, userName, userEmail, quizLevel, quizTopic, marks } =
+      await request.json();
 
-  // Comment out the OpenAI API call and response handling
-  /*
-  if (exam && topic && questions) {
-    try {
-      const prompt = `
-        Generate ${questions} progressively harder math questions on the topic of ${topic} for ${exam} preparation.
-        Format each question as "Q: [Question text]".
-      `;
-      const generatedText = await generateQuestions(prompt);
-      const questionList = generatedText
-        ?.split("\n")
-        .filter((q: string) => q.startsWith("Q:"));
-
-      return NextResponse.json({ questions: questionList });
-    } catch (error: any) {
-      console.error("Error generating questions:", error.message);
+    // Check for missing required fields
+    if (!userId || !userName || !userEmail) {
+      console.error("Missing required fields:", {
+        userId,
+        userName,
+        userEmail,
+      });
       return NextResponse.json(
-        { error: "Failed to generate questions." },
-        { status: 500 }
+        { error: "User information is missing." },
+        { status: 400 }
       );
     }
-  }
-  */
 
-  // Return a dummy success response for now
-  return NextResponse.json({ message: "Worksheet generated" });
+    // Save quiz result to PostgreSQL using Prisma
+    const quizResult = await prisma.quizResult.create({
+      data: {
+        userId,
+        userName,
+        quizLevel,
+        quizTopic,
+        marks,
+        createdAt: new Date(),
+      },
+    });
+
+    console.log("Quiz result saved:", quizResult);
+
+    // Return a success response
+    return NextResponse.json({
+      message: "Quiz result saved successfully.",
+    });
+  } catch (error: any) {
+    console.error("Error saving quiz result:", error.message);
+    return NextResponse.json(
+      { error: "Failed to save quiz result." },
+      { status: 500 }
+    );
+  }
 }

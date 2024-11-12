@@ -13,3 +13,13 @@ model User {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model QuizResult {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  userName    String
+  quizLevel   String
+  quizTopic   String
+  marks       Int
+  createdAt   DateTime @default(now())
+}

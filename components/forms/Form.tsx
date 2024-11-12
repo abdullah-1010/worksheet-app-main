@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import SubmitButton from "../SubmitButton";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
+import { getAuth } from "firebase/auth";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -37,7 +38,7 @@ const MForm = () => {
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
 
-    // Temporarily comment out the original API call and response handling
+    // Existing API call for OpenAI (left as commented code for now)
     /*
     try {
       console.log("Form submitted:", values);
@@ -56,16 +57,27 @@ const MForm = () => {
       const data = await response.json();
   
       // Redirect user to the worksheet page with generated questions
-      router.push(
-        `/worksheet?data=${encodeURIComponent(JSON.stringify(data))}`
-      );
+      router.push(`/worksheet?data=${encodeURIComponent(JSON.stringify(data))}`);
     } catch (error) {
       console.error(error);
       alert("An error occurred while generating the worksheet.");
     }
     */
 
-    // Simulate a 2-second loading delay and redirect to the worksheet page
+    // New Code: Save quiz result to PostgreSQL
+    try {
+      console.log("Form submitted:", values);
+
+      // Redirect to the quiz page with the form data
+      router.push(
+        `/worksheet?exam=${values.exam}&topic=${values.topic}&questions=${values.questions}`
+      );
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      alert("An error occurred while submitting the form.");
+    }
+
+    // Continue with redirect to worksheet page
     setTimeout(() => {
       router.push("/worksheet");
       setIsLoading(false);
