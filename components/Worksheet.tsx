@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,33 +8,19 @@ import SubmitButton from "../components/SubmitButton";
 import CustomFormField from "./CustomFormField";
 import { FormFieldType } from "./forms/Form";
 import { getAuth } from "firebase/auth";
+import { predefinedQuestions } from "./questions";
+import { useSearchParams } from "next/navigation";
 
-const questionsList = [
-  "Q1: What is the derivative of x^2?",
-  "Q2: Solve the integral of sin(x) dx.",
-  "Q3: What is the limit of (1 + 1/n)^n as n approaches infinity?",
-  "Q4: Find the value of the definite integral of x dx from 0 to 2.",
-  "Q5: Differentiate e^(2x).",
-  "Q6: Solve for x: ln(x) = 1.",
-  "Q7: What is the area under the curve of y = x^2 from x=0 to x=1?",
-  "Q8: Calculate the second derivative of x^3.",
-  "Q9: Evaluate the integral of 1/x dx.",
-  "Q10: Find the value of the derivative of sin(x) at x = π/4.",
-];
+// Define the form data type explicitly
+type WorksheetFormData = {
+  exam: string;
+  topic: string;
+  questions: number;
+  answers: string[];
+};
 
-// Define correct answers
-const correctAnswersList = [
-  "2x",
-  "-cos(x) + C",
-  "e",
-  "2",
-  "2e^(2x)",
-  "e",
-  "1/3",
-  "6x",
-  "ln|x| + C",
-  "cos(π/4)",
-];
+type ExamType = "A-Level" | "GCSE";
+type TopicType = "Algebra" | "Calculus" | "Geometry";
 
 // Validation schema
 const WorksheetValidation = z.object({
@@ -42,34 +28,78 @@ const WorksheetValidation = z.object({
 });
 
 export default function Worksheet() {
+  // Fetch query parameters using useSearchParams at the top level
+  const searchParams = useSearchParams();
+  const examType = (searchParams.get("exam") ||
+    "GCSE") as keyof typeof predefinedQuestions;
+  const topic = (searchParams.get("topic") ||
+    "Algebra") as keyof (typeof predefinedQuestions)["A-Level"];
+  const numQuestions = parseInt(searchParams.get("questions") || "10");
+
   const [isLoading, setIsLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackList, setFeedbackList] = useState<string[]>([]);
+  const [questionsList, setQuestionsList] = useState<
+    { question: string; answer: string }[]
+  >([]);
 
   // Initialize form using react-hook-form and zod validation
-  const methods = useForm({
+  const methods = useForm<WorksheetFormData>({
     resolver: zodResolver(WorksheetValidation),
     defaultValues: {
-      answers: Array(questionsList.length).fill(""),
+      exam: "GCSE",
+      topic: "Algebra",
+      questions: 10,
+      answers: [],
     },
   });
 
-  // Handle form submission
+  // Fetch the questions based on user input
+  useEffect(() => {
+    // Validate the form values
+    if (!examType || !topic) {
+      console.error("Invalid URL parameters: Missing exam type or topic.");
+      return;
+    }
+
+    // Fetch the correct questions based on the selected values
+    const selectedQuestions = predefinedQuestions[examType]?.[topic] ?? [];
+
+    // Ensure we have enough questions for the requested number
+    const availableQuestions = selectedQuestions.length;
+    const finalNumQuestions = Math.min(numQuestions, availableQuestions);
+
+    if (numQuestions > availableQuestions) {
+      alert(
+        `Only ${availableQuestions} questions are available for ${examType} - ${topic}. Showing ${availableQuestions} questions instead.`
+      );
+    }
+
+    // Randomly select the requested number of questions
+    const randomizedQuestions = selectedQuestions
+      .sort(() => 0.5 - Math.random())
+      .slice(0, finalNumQuestions);
+
+    setQuestionsList(randomizedQuestions);
+
+    // Reset the answers array based on the number of selected questions
+    methods.reset({
+      answers: Array(randomizedQuestions.length).fill(""),
+    });
+  }, [examType, topic, numQuestions, methods]);
+
   // Handle form submission
   const onSubmit = async (values: { answers: string[] }) => {
     setIsLoading(true);
 
     // Calculate feedback and total marks
     const feedback = values.answers.map((answer, index) => {
-      const correctAnswer = correctAnswersList[index].toLowerCase().trim();
+      const correctAnswer = questionsList[index]?.answer.toLowerCase().trim();
       const userAnswer = answer.toLowerCase().trim();
 
-      // Check if the user's answer is correct
-      if (userAnswer === correctAnswer) {
-        return `Correct Answer: ${correctAnswersList[index]}`;
-      } else {
-        return `Wrong Answer. Correct Answer is: ${correctAnswersList[index]}`;
-      }
+      return userAnswer === correctAnswer
+        ? `Correct Answer: ${questionsList[index]?.answer}`
+        : `Wrong Answer. Correct Answer is: ${questionsList[index]?.answer}`;
     });
 
     setFeedbackList(feedback);
@@ -96,17 +126,13 @@ export default function Worksheet() {
         item.startsWith("Correct")
       ).length;
 
-      // Hardcoded quiz level and topic
-      const quizLevel = "A-Level"; // Hardcoded value
-      const quizTopic = "Calculus"; // Hardcoded value
-
       // Prepare quiz data to save
       const quizData = {
         userId,
         userName,
         userEmail,
-        quizLevel,
-        quizTopic,
+        quizLevel: examType,
+        quizTopic: topic,
         marks: totalMarks,
       };
 
@@ -144,23 +170,27 @@ export default function Worksheet() {
       >
         <section className="mb-12 space-y-4">
           <h1 className="header pt-3">Generated Quiz</h1>
-          <p className="text-dark-700">Answer all the questions below:</p>
+          <p className="text-dark-700">
+            Answer the selected number of questions:
+          </p>
         </section>
 
-        {/* Render questions, answers, and feedback */}
-        {questionsList.map((question, index) => (
+        {/* Render questions and feedback */}
+        {questionsList.map((questionObj, index) => (
           <div key={index} className="mb-6">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
               control={methods.control}
               name={`answers.${index}`}
-              label={question}
+              label={questionObj.question}
               placeholder="Your answer"
+              max={undefined}
+              min={undefined}
             />
             {showFeedback && (
               <p
                 className={`mt-2 ${
-                  feedbackList[index].startsWith("Correct")
+                  feedbackList[index]?.startsWith("Correct")
                     ? "text-green-500"
                     : "text-red-500"
                 }`}

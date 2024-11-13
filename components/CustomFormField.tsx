@@ -29,6 +29,8 @@ interface Option {
 }
 
 interface CustomProps {
+  max: string | number | undefined;
+  min: string | number | undefined;
   control: Control<any>;
   fieldType: FormFieldType;
   name: string;
@@ -74,7 +76,10 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           <FormControl>
             <Input
               placeholder={placeholder}
-              type={props.type || "text"} // Use the type prop or default to "text"
+              type={props.type || "text"}
+              min={props.min} // Add min prop
+              max={props.max} // Add max prop
+              valueAsNumber={props.valueAsNumber} // Add valueAsNumber prop
               {...field}
               className="shad-input border-0"
             />

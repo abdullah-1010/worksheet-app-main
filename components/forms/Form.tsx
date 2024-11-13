@@ -70,18 +70,17 @@ const MForm = () => {
 
       // Redirect to the quiz page with the form data
       router.push(
-        `/worksheet?exam=${values.exam}&topic=${values.topic}&questions=${values.questions}`
+        `/worksheet?exam=${encodeURIComponent(
+          values.exam
+        )}&topic=${encodeURIComponent(values.topic)}&questions=${
+          values.questions || 10
+        }`
       );
     } catch (error) {
       console.error("Error during form submission:", error);
       alert("An error occurred while submitting the form.");
     }
-
-    // Continue with redirect to worksheet page
-    setTimeout(() => {
-      router.push("/worksheet");
-      setIsLoading(false);
-    }, 2000);
+    setIsLoading(false);
   };
 
   return (
@@ -101,9 +100,9 @@ const MForm = () => {
           options={[
             { value: "A-Level", label: "A-Level" },
             { value: "GCSE", label: "GCSE" },
-            { value: "SAT", label: "SAT" },
-            { value: "IB", label: "IB" },
           ]}
+          max={undefined}
+          min={undefined}
         />
 
         {/* Dropdown for Topic */}
@@ -116,8 +115,9 @@ const MForm = () => {
             { value: "Algebra", label: "Algebra" },
             { value: "Calculus", label: "Calculus" },
             { value: "Geometry", label: "Geometry" },
-            { value: "Trigonometry", label: "Trigonometry" },
           ]}
+          max={undefined}
+          min={undefined}
         />
 
         {/* Number Input for Questions */}
@@ -128,6 +128,8 @@ const MForm = () => {
           label="Number of Questions"
           placeholder="Enter a number between 1 and 20"
           type="number"
+          min={1}
+          max={20}
           valueAsNumber
         />
 
