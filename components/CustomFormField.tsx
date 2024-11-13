@@ -2,7 +2,6 @@
 
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,19 +21,13 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
-
-interface Option {
-  value: string;
-  label: string;
-}
-
 interface CustomProps {
   max: string | number | undefined;
   min: string | number | undefined;
   control: Control<any>;
   fieldType: FormFieldType;
   name: string;
-  label?: string;
+  label?: string | any;
   placeholder?: string;
   iconSrc?: string;
   iconAlt?: string;

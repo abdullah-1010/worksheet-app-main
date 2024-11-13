@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 import { z } from "zod";
 import SubmitButton from "../components/SubmitButton";
 import CustomFormField from "./CustomFormField";
@@ -40,7 +42,12 @@ export default function Worksheet() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackList, setFeedbackList] = useState<string[]>([]);
   const [questionsList, setQuestionsList] = useState<
-    { question: string; answer: string }[]
+    {
+      question?: string;
+      answer?: string;
+      questionText?: string;
+      questionMath?: string;
+    }[]
   >([]);
 
   // Initialize form using react-hook-form and zod validation
@@ -94,12 +101,14 @@ export default function Worksheet() {
 
     // Calculate feedback and total marks
     const feedback = values.answers.map((answer, index) => {
-      const correctAnswer = questionsList[index]?.answer.toLowerCase().trim();
+      const correctAnswer = questionsList[index]?.answer?.toLowerCase()?.trim();
       const userAnswer = answer.toLowerCase().trim();
 
       return userAnswer === correctAnswer
         ? `Correct Answer: ${questionsList[index]?.answer}`
-        : `Wrong Answer. Correct Answer is: ${questionsList[index]?.answer}`;
+        : `Wrong Answer. Correct Answer is: ${(
+            <InlineMath>{questionsList[index]?.answer}</InlineMath>
+          )}`;
     });
 
     setFeedbackList(feedback);
@@ -182,7 +191,12 @@ export default function Worksheet() {
               fieldType={FormFieldType.INPUT}
               control={methods.control}
               name={`answers.${index}`}
-              label={questionObj.question}
+              label={
+                <>
+                  {questionObj.questionText}{" "}
+                  <InlineMath>{questionObj.questionMath}</InlineMath>
+                </>
+              }
               placeholder="Your answer"
               max={undefined}
               min={undefined}

@@ -3,26 +3,106 @@
 export const predefinedQuestions = {
   "A-Level": {
     Algebra: [
-      { question: "Solve for x: 2x + 3 = 11", answer: "4" },
-      { question: "What is the derivative of x^2?", answer: "2x" },
-      { question: "Factorize x^2 - 9", answer: "(x-3)(x+3)" },
-      { question: "Solve for y: y^2 = 16", answer: "4 or -4" },
-      { question: "Expand (x + 2)(x - 2)", answer: "x^2 - 4" },
-      { question: "Solve for x: x^2 - 4x = 0", answer: "0 or 4" },
-      { question: "Find the roots of x^2 - 5x + 6", answer: "2 and 3" },
-      { question: "Solve for y: 3y - 2 = 10", answer: "4" },
-      { question: "What is x if 3x + 6 = 0?", answer: "-2" },
-      { question: "Simplify x^2 / x", answer: "x" },
-      { question: "Evaluate 2^3", answer: "8" },
-      { question: "Factorize: x^2 - 16", answer: "(x-4)(x+4)" },
-      { question: "Solve for x: x + 5 = 10", answer: "5" },
-      { question: "Simplify: 2(x + 3)", answer: "2x + 6" },
-      { question: "Solve for y: 4y = 20", answer: "5" },
-      { question: "What is the cube of 3?", answer: "27" },
-      { question: "Expand (a + b)^2", answer: "a^2 + 2ab + b^2" },
-      { question: "What is the value of x if x^2 = 49?", answer: "7 or -7" },
-      { question: "Simplify: (x^2 - 4)/(x - 2)", answer: "x + 2" },
-      { question: "Solve for z: z/3 = 15", answer: "45" },
+      {
+        questionText: "Solve for x:",
+        questionMath: "2x + 3 = 11",
+        answer: "4",
+      },
+      {
+        questionText: "What is the derivative of",
+        questionMath: "x^2",
+        answer: "2x",
+      },
+      {
+        questionText: "Factorize",
+        questionMath: "x^2 - 9",
+        answer: "(x-3)(x+3)",
+      },
+      {
+        questionText: "Solve for y:",
+        questionMath: "y^2 = 16",
+        answer: "4 or -4",
+      },
+      {
+        questionText: "Expand",
+        questionMath: "(x + 2)(x - 2)",
+        answer: "x^2 - 4",
+      },
+      {
+        questionText: "Solve for x:",
+        questionMath: "x^2 - 4x = 0",
+        answer: "0 or 4",
+      },
+      {
+        questionText: "Find the roots of",
+        questionMath: "x^2 - 5x + 6",
+        answer: "2 and 3",
+      },
+      {
+        questionText: "Solve for y:",
+        questionMath: "3y - 2 = 10",
+        answer: "4",
+      },
+      {
+        questionText: "What is x if",
+        questionMath: "3x + 6 = 0",
+        answer: "-2",
+      },
+      {
+        questionText: "Simplify",
+        questionMath: "x^2 / x",
+        answer: "x",
+      },
+      {
+        questionText: "Evaluate",
+        questionMath: "2^3",
+        answer: "8",
+      },
+      {
+        questionText: "Factorize:",
+        questionMath: "x^2 - 16",
+        answer: "(x-4)(x+4)",
+      },
+      {
+        questionText: "Solve for x:",
+        questionMath: "x + 5 = 10",
+        answer: "5",
+      },
+      {
+        questionText: "Simplify:",
+        questionMath: "2(x + 3)",
+        answer: "2x + 6",
+      },
+      {
+        questionText: "Solve for y:",
+        questionMath: "4y = 20",
+        answer: "5",
+      },
+      {
+        questionText: "What is the cube of",
+        questionMath: "3",
+        answer: "27",
+      },
+      {
+        questionText: "Expand",
+        questionMath: "(a + b)^2",
+        answer: "a^2 + 2ab + b^2",
+      },
+      {
+        questionText: "What is the value of x if",
+        questionMath: "x^2 = 49",
+        answer: "7 or -7",
+      },
+      {
+        questionText: "Simplify:",
+        questionMath: "(x^2 - 4)/(x - 2)",
+        answer: "x + 2",
+      },
+      {
+        questionText: "Solve for z:",
+        questionMath: "z/3 = 15",
+        answer: "45",
+      },
     ],
     Calculus: [
       { question: "Differentiate e^(2x)", answer: "2e^(2x)" },
